@@ -5,6 +5,7 @@ import './AppShell.css';
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Leads', icon: '◆' },
   { to: '/admin/properties', label: 'Properties', icon: '▢' },
+  { to: '/admin/users', label: 'Users', icon: '●' },
 ];
 
 export default function AppShell({ children, title, subtitle }) {

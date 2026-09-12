@@ -10,11 +10,14 @@ import ProjectDetail from './pages/ProjectDetail';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AdminProperties from './pages/AdminProperties';
+import AdminUsers from './pages/AdminUsers';
 
-function PrivateRoute({ children }) {
+function PrivateRoute({ children, roles }) {
   const { user, loading } = useAuth();
   if (loading) return <p style={{ textAlign: 'center', marginTop: 80 }}>Loading...</p>;
-  return user ? children : <Navigate to="/login" />;
+  if (!user) return <Navigate to="/login" />;
+  if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" />;
+  return children;
 }
 
 export default function App() {
@@ -33,7 +36,7 @@ export default function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
+              <PrivateRoute roles={['super_admin', 'sub_admin', 'executive']}>
                 <Dashboard />
               </PrivateRoute>
             }
@@ -41,8 +44,16 @@ export default function App() {
           <Route
             path="/admin/properties"
             element={
-              <PrivateRoute>
+              <PrivateRoute roles={['super_admin', 'sub_admin']}>
                 <AdminProperties />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute roles={['super_admin']}>
+                <AdminUsers />
               </PrivateRoute>
             }
           />

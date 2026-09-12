@@ -8,6 +8,7 @@ const propertyRoutes = require('./routes/propertyRoutes');
 const leadRoutes = require('./routes/leadRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const commissionSlabRoutes = require('./routes/commissionSlabRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,7 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/sales', saleRoutes);
 app.use('/api/commission-slabs', commissionSlabRoutes);
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -8,6 +8,8 @@ function signToken(user) {
   });
 }
 
+const PUBLIC_ROLES = ['customer', 'investor'];
+
 async function register(req, res) {
   try {
     const { name, email, phone, password, role, sponsorId } = req.body;
@@ -15,10 +17,37 @@ async function register(req, res) {
       return res.status(400).json({ message: 'name, email, password are required' });
     }
 
+    const safeRole = PUBLIC_ROLES.includes(role) ? role : 'customer';
+
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return res.status(409).json({ message: 'Email already registered' });
 
-    const user = new User({ name, email, phone, role: role || 'executive', sponsorId: sponsorId || null });
+    const user = new User({ name, email, phone, role: safeRole, sponsorId: sponsorId || null });
+    await user.setPassword(password);
+    await user.save();
+
+    if (sponsorId) await rebuildUplineChain(user._id);
+
+    res.status(201).json({ id: user._id, name: user.name, email: user.email, role: user.role });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+async function createStaff(req, res) {
+  try {
+    const { name, email, phone, password, role, sponsorId } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'name, email, password are required' });
+    }
+    if (!['executive', 'sub_admin'].includes(role)) {
+      return res.status(400).json({ message: 'role must be executive or sub_admin' });
+    }
+
+    const existing = await User.findOne({ email: email.toLowerCase() });
+    if (existing) return res.status(409).json({ message: 'Email already registered' });
+
+    const user = new User({ name, email, phone, role, sponsorId: sponsorId || null });
     await user.setPassword(password);
     await user.save();
 
@@ -55,4 +84,4 @@ async function me(req, res) {
   res.json(user);
 }
 
-module.exports = { register, login, me };
+module.exports = { register, login, me, createStaff };
