@@ -5,6 +5,8 @@ import About from './pages/About';
 import Vision from './pages/Vision';
 import Gallery from './pages/Gallery';
 import Legal from './pages/Legal';
+import Projects from './pages/Projects';
+import ProjectDetail from './pages/ProjectDetail';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AdminProperties from './pages/AdminProperties';
@@ -25,6 +27,8 @@ export default function App() {
           <Route path="/vision" element={<Vision />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/legal" element={<Legal />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/dashboard"

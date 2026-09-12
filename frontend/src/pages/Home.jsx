@@ -6,24 +6,28 @@ import './Home.css';
 const CATEGORIES = [
   {
     name: 'Plotting',
+    slug: 'plotting',
     desc: 'Farm and residential plots with clear layouts, road access, and full approvals disclosed upfront.',
     cta: 'Book a site visit',
     img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Residential',
+    slug: 'residential',
     desc: 'Homes chosen for location advantage, amenities, and long-term value.',
     cta: 'Enquire now',
     img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Commercial',
+    slug: 'commercial',
     desc: 'Business-ready spaces in locations built for footfall and growth.',
     cta: 'Get project details',
     img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
   },
   {
     name: 'Farm & Land',
+    slug: 'farm',
     desc: 'Land opportunities with complete access and usage disclosures.',
     cta: 'Request information',
     img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80',
@@ -184,7 +188,7 @@ export default function Home() {
               <div className="category-card-body">
                 <h3>{cat.name}</h3>
                 <p>{cat.desc}</p>
-                <a href="#contact">{cat.cta}</a>
+                <Link to={`/projects?category=${cat.slug}`}>{cat.cta} →</Link>
               </div>
             </div>
           ))}
