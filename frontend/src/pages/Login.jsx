@@ -18,7 +18,10 @@ export default function Login() {
     try {
       const loggedInUser = await login(email, password);
       const staffRoles = ['super_admin', 'sub_admin', 'executive'];
-      navigate(staffRoles.includes(loggedInUser.role) ? '/dashboard' : '/');
+      const partnerRoles = ['investor', 'jv_partner'];
+      if (staffRoles.includes(loggedInUser.role)) navigate('/dashboard');
+      else if (partnerRoles.includes(loggedInUser.role)) navigate('/partner');
+      else navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Check your details and try again.');
     } finally {
@@ -68,6 +71,9 @@ export default function Login() {
             </button>
           </form>
 
+          <p className="login-sub" style={{ marginTop: 18, marginBottom: 0 }}>
+            New partner? <Link to="/partner-signup" style={{ color: 'var(--gold-light)' }}>Sign up here</Link>
+          </p>
           <Link to="/" className="login-back">← Back to homepage</Link>
         </div>
       </div>

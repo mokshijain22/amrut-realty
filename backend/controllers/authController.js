@@ -8,7 +8,7 @@ function signToken(user) {
   });
 }
 
-const PUBLIC_ROLES = ['customer', 'investor'];
+const PUBLIC_ROLES = ['customer', 'investor', 'jv_partner'];
 
 async function register(req, res) {
   try {

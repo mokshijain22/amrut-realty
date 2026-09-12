@@ -1,0 +1,18 @@
+.partner-page { min-height: 100svh; background: var(--navy); font-family: var(--sans); }
+.partner-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 40px;
+}
+.partner-card {
+  max-width: 480px; margin: 40px auto; padding: 0 24px;
+}
+.partner-status {
+  display: inline-block; padding: 8px 14px; border-radius: 4px;
+  font-size: 13px; color: var(--muted); margin-bottom: 20px;
+}
+.partner-status-pending { background: rgba(201,162,39,0.15); color: var(--gold-light); }
+.partner-status-approved { background: rgba(96,178,120,0.15); color: #8fd6a5; }
+.partner-status-rejected { background: rgba(225,136,136,0.15); color: #e18888; }
+.partner-upload-form { display: grid; gap: 14px; margin-top: 10px; }
+.partner-upload-form input[type="file"] { color: var(--muted); font-size: 13px; }
+.partner-success { color: #8fd6a5; font-size: 13px; margin: 0; }

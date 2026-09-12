@@ -8,9 +8,12 @@ import Legal from './pages/Legal';
 import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
 import Login from './pages/Login';
+import PartnerSignup from './pages/PartnerSignup';
+import PartnerDashboard from './pages/PartnerDashboard';
 import Dashboard from './pages/Dashboard';
 import AdminProperties from './pages/AdminProperties';
 import AdminUsers from './pages/AdminUsers';
+import AdminKyc from './pages/AdminKyc';
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useAuth();
@@ -33,6 +36,15 @@ export default function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/partner-signup" element={<PartnerSignup />} />
+          <Route
+            path="/partner"
+            element={
+              <PrivateRoute roles={['investor', 'jv_partner']}>
+                <PartnerDashboard />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/dashboard"
             element={
@@ -54,6 +66,14 @@ export default function App() {
             element={
               <PrivateRoute roles={['super_admin']}>
                 <AdminUsers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/kyc"
+            element={
+              <PrivateRoute roles={['super_admin', 'sub_admin']}>
+                <AdminKyc />
               </PrivateRoute>
             }
           />
