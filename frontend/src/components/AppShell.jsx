@@ -3,21 +3,22 @@ import { useAuth } from '../context/AuthContext';
 import './AppShell.css';
 
 const NAV_ITEMS = [
-  { to: '/dashboard', label: 'Leads', icon: '◆' },
-  { to: '/admin/properties', label: 'Properties', icon: '▢' },
-  { to: '/admin/users', label: 'Users', icon: '●' },
+  { to: '/dashboard', label: 'Leads', icon: '◆', roles: ['super_admin', 'sub_admin', 'executive'] },
+  { to: '/admin/properties', label: 'Properties', icon: '▢', roles: ['super_admin', 'sub_admin'] },
+  { to: '/admin/users', label: 'Users', icon: '●', roles: ['super_admin'] },
 ];
 
 export default function AppShell({ children, title, subtitle }) {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const visibleNavItems = NAV_ITEMS.filter((item) => item.roles.includes(user?.role));
 
   return (
     <div className="shell">
       <aside className="shell-sidebar">
         <Link to="/" className="shell-brand">Amrut <span>Realty</span></Link>
         <nav className="shell-nav">
-          {NAV_ITEMS.map((item) => (
+          {visibleNavItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}

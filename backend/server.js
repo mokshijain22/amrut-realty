@@ -9,10 +9,13 @@ const leadRoutes = require('./routes/leadRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const commissionSlabRoutes = require('./routes/commissionSlabRoutes');
 const userRoutes = require('./routes/userRoutes');
+const kycRoutes = require('./routes/kycRoutes');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
@@ -22,6 +25,7 @@ app.use('/api/leads', leadRoutes);
 app.use('/api/sales', saleRoutes);
 app.use('/api/commission-slabs', commissionSlabRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/kyc', kycRoutes);
 
 const PORT = process.env.PORT || 5000;
 

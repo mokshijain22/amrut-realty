@@ -16,8 +16,9 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const loggedInUser = await login(email, password);
+      const staffRoles = ['super_admin', 'sub_admin', 'executive'];
+      navigate(staffRoles.includes(loggedInUser.role) ? '/dashboard' : '/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Check your details and try again.');
     } finally {
