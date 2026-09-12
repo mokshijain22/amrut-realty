@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import AdminProperties from './pages/AdminProperties';
 import AdminUsers from './pages/AdminUsers';
 import AdminKyc from './pages/AdminKyc';
+import AdminCommissionSlabs from './pages/AdminCommissionSlabs';
 
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useAuth();
@@ -74,6 +75,14 @@ export default function App() {
             element={
               <PrivateRoute roles={['super_admin', 'sub_admin']}>
                 <AdminKyc />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/commission-slabs"
+            element={
+              <PrivateRoute roles={['super_admin', 'sub_admin']}>
+                <AdminCommissionSlabs />
               </PrivateRoute>
             }
           />

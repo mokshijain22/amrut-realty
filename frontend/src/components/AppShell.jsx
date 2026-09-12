@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { to: '/admin/properties', label: 'Properties', icon: '▢', roles: ['super_admin', 'sub_admin'] },
   { to: '/admin/users', label: 'Users', icon: '●', roles: ['super_admin'] },
   { to: '/admin/kyc', label: 'KYC Review', icon: '✓', roles: ['super_admin', 'sub_admin'] },
+  { to: '/admin/commission-slabs', label: 'Commission Slabs', icon: '%', roles: ['super_admin', 'sub_admin'] },
 ];
 
 export default function AppShell({ children, title, subtitle }) {
