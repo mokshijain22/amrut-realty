@@ -34,26 +34,31 @@ async function register(req, res) {
   }
 }
 
+const STAFF_CREATABLE_ROLES = ['executive', 'sub_admin', 'investor', 'jv_partner'];
+
 async function createStaff(req, res) {
   try {
-    const { name, email, phone, password, role, sponsorId } = req.body;
+    const { name, email, phone, password, role, sponsorId, preApprove } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'name, email, password are required' });
     }
-    if (!['executive', 'sub_admin'].includes(role)) {
-      return res.status(400).json({ message: 'role must be executive or sub_admin' });
+    if (!STAFF_CREATABLE_ROLES.includes(role)) {
+      return res.status(400).json({ message: 'role must be executive, sub_admin, investor, or jv_partner' });
     }
 
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return res.status(409).json({ message: 'Email already registered' });
 
-    const user = new User({ name, email, phone, role, sponsorId: sponsorId || null });
+    const isPartnerRole = ['investor', 'jv_partner'].includes(role);
+    const kycStatus = isPartnerRole && preApprove ? 'approved' : 'pending';
+
+    const user = new User({ name, email, phone, role, sponsorId: sponsorId || null, kycStatus });
     await user.setPassword(password);
     await user.save();
 
     if (sponsorId) await rebuildUplineChain(user._id);
 
-    res.status(201).json({ id: user._id, name: user.name, email: user.email, role: user.role });
+    res.status(201).json({ id: user._id, name: user.name, email: user.email, role: user.role, kycStatus: user.kycStatus });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

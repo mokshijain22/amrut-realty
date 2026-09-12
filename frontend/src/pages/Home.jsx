@@ -209,7 +209,7 @@ export default function Home() {
           <p className="section-label">Channel partner program</p>
           <h2>Sell with Amrut.</h2>
           <p>Structured commissions, a trained sales network, and a track record going back to 2007.</p>
-          <a href="#contact" className="btn-gold">Register as a partner</a>
+          <Link to="/partner-signup" className="btn-gold">Register as a partner</Link>
         </div>
       </section>
 

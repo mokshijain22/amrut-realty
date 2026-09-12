@@ -3,18 +3,29 @@ import api from '../api/client';
 import AppShell from '../components/AppShell';
 import './AdminProperties.css';
 
-const STAFF_ROLES = ['executive', 'sub_admin'];
+const STAFF_ROLES = ['executive', 'sub_admin', 'investor', 'jv_partner'];
+
+const ROLE_LABELS = {
+  sub_admin: 'Sub Admin',
+  executive: 'Executive',
+  investor: 'Investor',
+  jv_partner: 'JV Partner',
+};
 
 const ROLE_STYLES = {
   super_admin: 'status-published',
   sub_admin: 'status-pending',
   executive: 'status-draft',
+  investor: 'status-pending',
+  jv_partner: 'status-draft',
 };
+
+const PARTNER_ROLES = ['investor', 'jv_partner'];
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({
-    name: '', email: '', phone: '', password: '', role: 'executive',
+    name: '', email: '', phone: '', password: '', role: 'executive', preApprove: false,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -35,7 +46,7 @@ export default function AdminUsers() {
     setSaving(true);
     try {
       await api.post('/auth/staff', form);
-      setForm({ name: '', email: '', phone: '', password: '', role: 'executive' });
+      setForm({ name: '', email: '', phone: '', password: '', role: 'executive', preApprove: false });
       loadAll();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create user');
@@ -95,10 +106,22 @@ export default function AdminUsers() {
             Role
             <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
               {STAFF_ROLES.map((r) => (
-                <option key={r} value={r}>{r === 'sub_admin' ? 'Sub Admin' : 'Executive'}</option>
+                <option key={r} value={r}>{ROLE_LABELS[r]}</option>
               ))}
             </select>
           </label>
+
+          {PARTNER_ROLES.includes(form.role) && (
+            <label style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <input
+                type="checkbox"
+                checked={form.preApprove}
+                onChange={(e) => setForm({ ...form, preApprove: e.target.checked })}
+                style={{ width: 'auto' }}
+              />
+              Pre-approve KYC (skip document review)
+            </label>
+          )}
 
           {error && <p className="props-error">{error}</p>}
 
@@ -124,7 +147,7 @@ export default function AdminUsers() {
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Role</th>
-                  <th>Rank</th>
+                  <th>Rank / KYC</th>
                 </tr>
               </thead>
               <tbody>
@@ -138,7 +161,7 @@ export default function AdminUsers() {
                         {u.role?.replace(/_/g, ' ')}
                       </span>
                     </td>
-                    <td>{u.rank}</td>
+                    <td>{PARTNER_ROLES.includes(u.role) ? (u.kycStatus || 'pending') : u.rank}</td>
                   </tr>
                 ))}
               </tbody>

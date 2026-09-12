@@ -5,7 +5,7 @@ const { requireAuth, requireRole } = require('../middleware/auth');
 
 router.get('/', requireAuth, requireRole('super_admin', 'sub_admin'), async (req, res) => {
   try {
-    const users = await User.find({ role: { $in: ['executive', 'sub_admin'] } })
+    const users = await User.find({ role: { $in: ['executive', 'sub_admin', 'investor', 'jv_partner'] } })
       .select('-passwordHash')
       .sort({ createdAt: -1 });
     res.json(users);
