@@ -1,0 +1,97 @@
+.journey {
+  position: relative;
+  height: 100vh;
+}
+
+.journey-stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.journey-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.journey-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 18, 32, 0.94) 30%, rgba(10, 18, 32, 0.45) 75%);
+  pointer-events: none;
+}
+
+.journey-text {
+  position: absolute;
+  left: 56px;
+  bottom: 100px;
+  max-width: 520px;
+}
+
+.journey-eyebrow {
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  margin: 0 0 14px;
+}
+
+.journey-text h2 {
+  font-family: var(--serif);
+  font-size: 44px;
+  line-height: 1.1;
+  font-weight: 500;
+  margin: 0 0 16px;
+  color: var(--paper);
+}
+
+.journey-body {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 440px;
+  margin: 0;
+}
+
+.journey-text-final .btn-gold {
+  margin-top: 24px;
+}
+
+.journey-progress {
+  position: absolute;
+  right: 56px;
+  bottom: 110px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.journey-progress span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@media (max-width: 960px) {
+  .journey-text {
+    left: 24px;
+    right: 24px;
+    bottom: 70px;
+    max-width: none;
+  }
+  .journey-text h2 { font-size: 30px; }
+  .journey-progress { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey {
+    height: auto;
+  }
+  .journey-stage {
+    height: 640px;
+  }
+}

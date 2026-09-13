@@ -1,38 +1,75 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import api from '../api/client';
+import HouseJourney from '../components/HouseJourney';
+import logoFull from '../assets/logo-full.png';
+import logoIcon from '../assets/logo-icon.png';
 import './Home.css';
 
 const CATEGORIES = [
   {
-    name: 'Plotting',
+    name: 'Plotting & Commercial',
     slug: 'plotting',
-    desc: 'Farm and residential plots with clear layouts, road access, and full approvals disclosed upfront.',
+    desc: 'Farm, residential and commercial plots with clear layouts, road access, and full approvals disclosed upfront.',
     cta: 'Book a site visit',
-    img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',
+    icon: 'plot',
+    big: true,
   },
   {
-    name: 'Residential',
+    name: 'Residential Properties',
     slug: 'residential',
     desc: 'Homes chosen for location advantage, amenities, and long-term value.',
     cta: 'Enquire now',
     img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+    icon: 'building',
   },
   {
-    name: 'Commercial',
-    slug: 'commercial',
-    desc: 'Business-ready spaces in locations built for footfall and growth.',
-    cta: 'Get project details',
-    img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+    name: 'Investment Consultancy',
+    slug: 'investment',
+    desc: 'Guidance on where and when to invest, backed by two decades of market experience.',
+    cta: 'Talk to an advisor',
+    img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80',
+    icon: 'handshake',
   },
   {
-    name: 'Farm & Land',
-    slug: 'farm',
-    desc: 'Land opportunities with complete access and usage disclosures.',
+    name: 'Legal Assistance',
+    slug: 'legal',
+    desc: 'Title checks, documentation and RERA compliance handled before you sign anything.',
     cta: 'Request information',
-    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80',
+    icon: 'document',
   },
 ];
+
+const CATEGORY_ICONS = {
+  plot: (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M16 4 3 11l13 7 13-7z" />
+      <path d="M6 14.5V23l10 5 10-5v-8.5" />
+    </svg>
+  ),
+  building: (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <rect x="8" y="4" width="16" height="24" rx="1" />
+      <path d="M12 10h2M18 10h2M12 15h2M18 15h2M12 20h2M18 20h2M13 28v-5h6v5" />
+    </svg>
+  ),
+  handshake: (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M4 15l6-6 6 4 6-4 6 6" />
+      <path d="M10 13l6 6 6-6" />
+      <path d="M4 15l4 9 4-2M28 15l-4 9-4-2" />
+    </svg>
+  ),
+  document: (
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M9 3h10l6 6v20H9z" />
+      <path d="M19 3v6h6" />
+      <path d="M13 17h9M13 21h9M13 25h5" />
+    </svg>
+  ),
+};
 
 const LOCATIONS = ['Mumbai', 'Pune', 'Mahabaleshwar', 'Sangli', 'Kolhapur', 'New Delhi'];
 
@@ -74,7 +111,6 @@ function StatItem({ value, suffix, label, active }) {
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [heroLoaded, setHeroLoaded] = useState(false);
   const [statsActive, setStatsActive] = useState(false);
   const statsRef = useRef(null);
 
@@ -101,11 +137,7 @@ export default function Home() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
-    const t = setTimeout(() => setHeroLoaded(true), 60);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      clearTimeout(t);
-    };
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -127,7 +159,11 @@ export default function Home() {
   return (
     <div className="home">
       <header className={`nav ${scrolled ? 'nav-scrolled' : ''}`}>
-        <span className="nav-brand">Amrut <span>Realty</span></span>
+        <Link to="/" className="nav-brand">
+          <span className="nav-logo-badge">
+            <img src={logoIcon} alt="Amrut Realty" className="nav-logo" />
+          </span>
+        </Link>
         <nav className="nav-links">
           <Link to="/about">About</Link>
           <Link to="/vision">Vision &amp; Mission</Link>
@@ -138,30 +174,7 @@ export default function Home() {
         <Link to="/login" className="nav-cta">Partner login</Link>
       </header>
 
-      <section className="hero">
-        <div className="hero-bg" />
-        <div className="hero-overlay" />
-        <div className={`hero-content ${heroLoaded ? 'is-in' : ''}`}>
-          <p className="hero-eyebrow">Building across Mumbai, Pune and beyond since 2007</p>
-          <h1>
-            Building trust.<br />
-            <span className="hero-accent">
-              Creating better opportunities.
-              <svg className="hero-underline" viewBox="0 0 320 18" preserveAspectRatio="none">
-                <path d="M2 12 C 80 4, 240 4, 318 10" />
-              </svg>
-            </span>
-          </h1>
-          <p className="hero-sub">
-            Plotting, residential and commercial opportunities across a growing
-            network of trusted locations.
-          </p>
-          <div className="hero-tags">
-            <span>Plotting</span><span>Residential</span><span>Commercial</span><span>Farm land</span>
-          </div>
-          <a href="#contact" className="btn-gold">Explore projects</a>
-        </div>
-      </section>
+      <HouseJourney />
 
       <section className="locations-strip">
         <p className="locations-label">Where we build</p>
@@ -174,17 +187,62 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="trust-strip">
+        <div className="trust-strip-item">
+          <strong>Mr. Sanjay S Patil</strong>
+          <span>Founder</span>
+        </div>
+        <div className="trust-strip-divider" />
+        <div className="trust-strip-item">
+          <strong>MAHA RERA</strong>
+          <span>A031292603321</span>
+        </div>
+        <div className="trust-strip-divider" />
+        <div className="trust-strip-item">
+          <strong>Vijaynagar, Sangli</strong>
+          <span>Maharashtra – 416414</span>
+        </div>
+        <div className="trust-strip-divider" />
+        <div className="trust-strip-item">
+          <strong>8767229779</strong>
+          <span>8830243676</span>
+        </div>
+      </section>
+
+      <section className="trust-strip">
+        <div className="trust-strip-item">
+          <strong>Mr. Sanjay S Patil</strong>
+          <span>Founder</span>
+        </div>
+        <div className="trust-strip-divider" />
+        <div className="trust-strip-item">
+          <strong>MAHA RERA</strong>
+          <span>A031292603321</span>
+        </div>
+        <div className="trust-strip-divider" />
+        <div className="trust-strip-item">
+          <strong>Vijaynagar, Sangli</strong>
+          <span>Maharashtra – 416414</span>
+        </div>
+        <div className="trust-strip-divider" />
+        <div className="trust-strip-item">
+          <strong>8767229779</strong>
+          <span>8830243676</span>
+        </div>
+      </section>
+
       <section id="projects" className="categories">
         <p className="section-label">What we build</p>
         <h2>Every kind of property, one trusted name.</h2>
         <div className="category-grid">
           {CATEGORIES.map((cat) => (
-            <div className="category-card" key={cat.name}>
+            <div className={`category-card ${cat.big ? 'category-card-big' : ''}`} key={cat.name}>
               <div
                 className="category-card-img"
                 style={{ backgroundImage: `url(${cat.img})` }}
               />
               <div className="category-card-overlay" />
+              <div className="category-card-icon">{CATEGORY_ICONS[cat.icon]}</div>
               <div className="category-card-body">
                 <h3>{cat.name}</h3>
                 <p>{cat.desc}</p>
@@ -218,6 +276,20 @@ export default function Home() {
           <p className="section-label">Get in touch</p>
           <h2>Talk to our property expert</h2>
           <p>Leave your details and our team will reach out to schedule a site visit.</p>
+          <div className="contact-details">
+            <div className="contact-details-row">
+              <strong>Office</strong>
+              <span>Vijaynagar, Sangli, Maharashtra – 416414</span>
+            </div>
+            <div className="contact-details-row">
+              <strong>Phone</strong>
+              <span>8767229779 / 8830243676</span>
+            </div>
+            <div className="contact-details-row">
+              <strong>MAHA RERA</strong>
+              <span>A031292603321</span>
+            </div>
+          </div>
         </div>
         {contactStatus === 'sent' ? (
           <div className="contact-success">
@@ -255,9 +327,27 @@ export default function Home() {
       </section>
 
       <footer className="footer">
-        <span>Amrut <b>Realty</b></span>
-        <p>Amrut Developers &amp; Amrut Realty — real estate since 2007.</p>
-        <Link to="/legal" className="footer-legal">Privacy &amp; Terms</Link>
+        <div className="footer-col footer-brand">
+          <img src={logoFull} alt="Amrut Realty — We Build Trust & Dreams" className="footer-logo" />
+          <p>Amrut Developers &amp; Amrut Realty — real estate since 2007.</p>
+        </div>
+        <div className="footer-col">
+          <strong>Explore</strong>
+          <Link to="/about">About</Link>
+          <Link to="/vision">Vision &amp; Mission</Link>
+          <a href="#projects">Projects</a>
+          <a href="#partner">Channel partner</a>
+        </div>
+        <div className="footer-col">
+          <strong>Contact</strong>
+          <span>Vijaynagar, Sangli, Maharashtra – 416414</span>
+          <span>8767229779 / 8830243676</span>
+          <span>MAHA RERA No. A031292603321</span>
+        </div>
+        <div className="footer-col footer-legal-col">
+          <strong>Legal</strong>
+          <Link to="/legal" className="footer-legal">Privacy &amp; Terms</Link>
+        </div>
       </footer>
     </div>
   );
